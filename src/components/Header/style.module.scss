@@ -1,0 +1,12 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 40px;
+
+    .navigation {
+        display: flex;
+        gap: 20px;
+    }
+}

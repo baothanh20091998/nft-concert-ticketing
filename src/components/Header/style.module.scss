@@ -5,6 +5,21 @@
     width: 100%;
     padding: 10px 40px;
 
+    .logo {
+        font-size: 32px;
+        font-weight: bold;
+
+        span {
+            color: var(--clr-primary);
+        }
+    }
+
+    .action {
+        display: flex;
+        align-items: baseline;
+        gap: 20px;
+    }
+
     .navigation {
         display: flex;
         gap: 20px;

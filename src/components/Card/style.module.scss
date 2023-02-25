@@ -1,8 +1,8 @@
 .card-wrapper {
-    display: grid;
-    place-items: center;
-    min-height: 100vh;
-    color: var(--clr-light) !important;
+    width: fit-content;
+    height: 100%;
+    z-index: 1000;
+    margin: 0 auto;
 
     :global {
         h1,
@@ -16,20 +16,9 @@
             max-width: 100%;
         }
 
-        .btn {
-            cursor: pointer;
-            border: 0;
-            background: var(--clr-secondary);
-            border-radius: 100vw;
-            color: var(--clr-light);
-            font-weight: bold;
-            padding: 8px 24px;
-        }
-
         .card {
             position: relative;
             width: 200px;
-            cursor: pointer;
         }
 
         .tickets {
@@ -99,8 +88,9 @@
             transform: translateY(35%);
 
             .ticket-info {
+                width: 100%;
                 columns: 2;
-                column-rule: 1px solid rgba(255, 255, 255, 0.25);
+                column-rule: 2px solid rgb(76, 80, 92);
             }
 
             .card-stat {
@@ -115,7 +105,7 @@
         }
 
         .background {
-            background: rgb(40, 46, 54);
+            background: var(--clr-background-primary);
             position: absolute;
             top: 0;
             left: 0;
@@ -148,8 +138,10 @@
 
             .back {
                 opacity: 1;
+                box-shadow: rgb(0 0 0 / 8%) 0px 4px 16px;
                 transform: translateY(0);
-                transition: transform 250ms ease, opacity 150ms linear;
+                transition: transform 250ms ease, opacity 150ms linear,
+                    box-shadow 250ms ease-in-out 0s;
 
                 .tickets {
                     width: 100%;
@@ -162,6 +154,10 @@
 
                 .name {
                     font-weight: bold;
+                }
+
+                .type {
+                    font-size: 12px;
                 }
             }
 

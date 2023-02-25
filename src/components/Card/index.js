@@ -1,4 +1,5 @@
 import React from "react";
+import ButtonCustom from "../ButtonCustom";
 import styles from "./style.module.scss";
 
 const src =
@@ -12,9 +13,9 @@ const Card = () => {
 
                 <div className="front">
                     <img className="thumbnail" src={src} alt="" />
-                    <h3 className="name">Card name</h3>
+                    <h3 className="name">The Ocean Sound</h3>
                     <div className="stats">
-                        <p className="viewers">539.9k</p>
+                        <p className="viewers">250 Tickets</p>
                         <div className="tickets">
                             <img src={src} alt="" />
                             <img src={src} alt="" />
@@ -25,14 +26,21 @@ const Card = () => {
                 <div className="back">
                     <div className="ticket-info">
                         <div className="card-stat">
-                            559K<span>Watched</span>
+                            500<span>Total tickets</span>
                         </div>
                         <div className="card-stat">
-                            25.8K<span>Watched</span>
+                            250<span>Remaining</span>
                         </div>
                     </div>
 
-                    <button className="btn">See more ticket</button>
+                    <ButtonCustom
+                        className="btn"
+                        onClick={() => {
+                            console.log(123);
+                        }}
+                    >
+                        See more tickets
+                    </ButtonCustom>
 
                     <div className="tickets">
                         <div className="ticket">
@@ -40,21 +48,21 @@ const Card = () => {
                                 <img src={src} alt="" />
                             </div>
                             <div className="name">Ticket 1</div>
-                            <div className="number">36.1k</div>
+                            <div className="type">Platinum</div>
                         </div>
                         <div className="ticket">
                             <div className="icon">
                                 <img src={src} alt="" />
                             </div>
                             <div className="name">Ticket 2</div>
-                            <div className="number">35.1k</div>
+                            <div className="type">Plus</div>
                         </div>
                         <div className="ticket">
                             <div className="icon">
                                 <img src={src} alt="" />
                             </div>
                             <div className="name">Ticket 3</div>
-                            <div className="number">34.1k</div>
+                            <div className="type">Standard</div>
                         </div>
                     </div>
                 </div>

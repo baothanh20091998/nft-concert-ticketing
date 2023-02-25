@@ -1,2 +1,19 @@
 .HomeWrapper {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    :global {
+        .banner-title {
+            text-align: center;
+            font-size: 80px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+        }
+    }
 }

@@ -1,0 +1,17 @@
+.ButtonCustomWrapper {
+    cursor: pointer;
+    border: 0;
+    background: var(--clr-primary);
+    border-radius: 100vw;
+    color: var(--clr-light);
+    font-weight: bold;
+    padding: 8px 24px;
+    width: 100%;
+    transition: 250ms;
+
+    &:hover {
+        background: rgb(46, 142, 238);
+    }
+    :global {
+    }
+}

@@ -1,0 +1,23 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  :global {
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    .avatarImg {
+      border-radius: 9999px;
+      width: 200px;
+      margin-bottom: 10px;
+    }
+    .address {
+      font-weight: 500;
+    }
+  }
+}

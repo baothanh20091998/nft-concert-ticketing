@@ -16,8 +16,16 @@
 
     .action {
         display: flex;
-        align-items: baseline;
+        align-items: center;
         gap: 20px;
+    }
+
+    .account {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+        font-size: 14px;
     }
 
     .navigation {

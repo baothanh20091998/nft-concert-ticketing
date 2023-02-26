@@ -2,7 +2,7 @@
     cursor: pointer;
     border: 0;
     background: var(--clr-primary);
-    border-radius: 12px;
+    border-radius: 8px;
     color: var(--clr-light);
     font-weight: bold;
     padding: 8px 24px;
@@ -12,6 +12,14 @@
     &:hover {
         background: rgb(46, 142, 238);
     }
-    :global {
+}
+
+.Secondary {
+    background: rgba(255, 255, 255, 0.24);
+    backdrop-filter: blur(20px);
+
+    &:hover {
+        background: var(--clr-light);
+        color: var(--black);
     }
 }

@@ -53,13 +53,39 @@ class MusicTicketContract {
     console.log("ticket response: ", response);
   }
 
-  async mint({ amount, typeTicket }) {
-    const response = await this.contract.methods
-      .mint(amount, typeTicket)
-      .send();
+  async mint({ amount, typeTicket, address }) {
+    const response = await this.contract.methods.mint(typeTicket).send({
+      from: address,
+      value: Web3.utils.toWei(amount.toString(), "ether"),
+    });
+
+    const { tokenId } = response.events.Mint.returnValues;
+
+    console.log(response);
+    console.log(tokenId);
+    this.getTokenUri({ tokenId });
 
     console.log("mint response: ", response);
+  }
+
+  async getTokenUri({ tokenId }) {
+    const response = await this.contract.methods.tokenURI(tokenId).call();
+    console.log("token uri: ", response);
+  }
+
+  async getBalanceOf({ address }) {
+    const response = await this.contract.methods.balanceOf(address).call();
+    console.log("balance of: ", response);
   }
 }
 
 export const MTContract = new MusicTicketContract();
+
+// typeToPrice[0] = 0.01 ether;
+//         typeToPrice[1] = 0.02 ether;
+//         typeToPrice[2] = 0.03 ether;
+//         typeToPrice[3] = 0.04 ether;
+//         typeToPrice[4] = 0.05 ether;
+
+// base url + link image
+const baseURLImg = "https://nftstorage.link/ipfs/";

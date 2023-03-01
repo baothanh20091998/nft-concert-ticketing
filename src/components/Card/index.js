@@ -1,15 +1,26 @@
 import React from "react";
+import {
+    IMAGE_DIAMOND,
+    IMAGE_GOLD,
+    IMAGE_PLATINUM,
+} from "../../utils/constants";
 import ButtonCustom from "../ButtonCustom";
 import styles from "./style.module.scss";
 
 const src =
     "https://cdn.galxe.com/galaxy/dropsdao/1519737b-ee1f-475d-bca4-4dabffb95f76.png?optimizer=image&width=400&quality=100";
 
+const TICKET = [
+    { type: "Diamond", src: IMAGE_DIAMOND },
+    { type: "Platinum", src: IMAGE_PLATINUM },
+    { type: "Gold", src: IMAGE_GOLD },
+];
+
 const Card = () => {
     return (
         <div className={styles["card-wrapper"]}>
             <div className="card">
-                <div className="rank">1</div>
+                {/* <div className="rank">1</div> */}
 
                 <div className="front">
                     <img className="thumbnail" src={src} alt="" />
@@ -17,9 +28,9 @@ const Card = () => {
                     <div className="stats">
                         <p className="viewers">250 Tickets</p>
                         <div className="tickets">
-                            <img src={src} alt="" />
-                            <img src={src} alt="" />
-                            <img src={src} alt="" />
+                            {TICKET.map((ticket) => (
+                                <img src={ticket.src} alt="" />
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -37,33 +48,28 @@ const Card = () => {
                         className="btn"
                         onClick={() => {
                             console.log(123);
+                            window.scrollTo({
+                                left: 0,
+                                top: document.body.scrollHeight,
+                                behavior: "smooth",
+                            });
                         }}
                     >
                         See more tickets
                     </ButtonCustom>
 
                     <div className="tickets">
-                        <div className="ticket">
-                            <div className="icon">
-                                <img src={src} alt="" />
-                            </div>
-                            <div className="name">Ticket 1</div>
-                            <div className="type">Platinum</div>
-                        </div>
-                        <div className="ticket">
-                            <div className="icon">
-                                <img src={src} alt="" />
-                            </div>
-                            <div className="name">Ticket 2</div>
-                            <div className="type">Plus</div>
-                        </div>
-                        <div className="ticket">
-                            <div className="icon">
-                                <img src={src} alt="" />
-                            </div>
-                            <div className="name">Ticket 3</div>
-                            <div className="type">Standard</div>
-                        </div>
+                        {TICKET.map((ticket, idx) => {
+                            console.log("idx :>> ", idx);
+                            return (
+                                <div className="ticket">
+                                    <div className="icon">
+                                        <img src={ticket.src} alt="" />
+                                    </div>
+                                    <div className="type">{ticket.type}</div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
 

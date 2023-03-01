@@ -22,64 +22,69 @@ const web3 = new Web3(Web3.givenProvider);
 // }
 
 export const TYPE_TICKET_NAME = [
-  "Bronze",
-  "Silver",
-  "Gold",
-  "Platinum",
-  "Diamond",
+    "Bronze",
+    "Silver",
+    "Gold",
+    "Platinum",
+    "Diamond",
 ];
 
 class MusicTicketContract {
-  contract;
-  contractAbi = ContractABI;
-  contractAdress = ContractAddress;
+    contract;
+    contractAbi = ContractABI;
+    contractAdress = ContractAddress;
 
-  constructor() {
-    this.contract = this.initContract();
-  }
-
-  initContract() {
-    const contract = new web3.eth.Contract(
-      this.contractAbi,
-      this.contractAdress
-    );
-    return contract;
-  }
-
-  async getBalanceOf(address) {
-    const response = await this.contract.methods.balanceOf(address).call();
-    console.log("balance of: ", response);
-  }
-
-  async mint({ amount, typeTicket, address }) {
-    const typeToPrice = [0.01, 0.02, 0.03, 0.04, 0.05];
-    const price = typeToPrice[typeTicket];
-
-    const rawTxn = {
-      from: address,
-      value: web3.utils.toWei(amount.toString(), "ether"),
-    };
-    const response = await this.contract.methods.mint(price).send(rawTxn);
-
-    const { tokenId } = response.events.Mint.returnValues;
-
-    const tickets = JSON.parse(localStorage.getItem("tickets") || "[]");
-
-    const i = tickets.findIndex((item) => item.address === address);
-    if (i === -1) {
-      const owner = {
-        address: address,
-        tickets: [
-          { ticketType: TYPE_TICKET_NAME[typeTicket], ticketId: tokenId },
-        ],
-      };
-      tickets.push(owner);
-    } else {
-      tickets[i].tickets.push({ type: typeTicket, id: tokenId });
+    constructor() {
+        this.contract = this.initContract();
     }
 
-    JSON.setItem("tickets", JSON.stringify(tickets));
-  }
+    initContract() {
+        const contract = new web3.eth.Contract(
+            this.contractAbi,
+            this.contractAdress
+        );
+        return contract;
+    }
+
+    async getBalanceOf(address) {
+        const response = await this.contract.methods.balanceOf(address).call();
+        console.log("balance of: ", response);
+    }
+
+    async mint({ typeTicket, address }) {
+        const typeToPrice = [0.01, 0.02, 0.03, 0.04, 0.05];
+        const price = typeToPrice[typeTicket];
+
+        const rawTxn = {
+            from: address,
+            value: web3.utils.toWei(price.toString(), "ether"),
+        };
+        const response = await this.contract.methods
+            .mint(typeTicket)
+            .send(rawTxn);
+
+        const { tokenId } = response.events.Mint.returnValues;
+
+        const tickets = JSON.parse(localStorage.getItem("tickets") || "[]");
+
+        const i = tickets.findIndex((item) => item.address === address);
+        if (i === -1) {
+            const owner = {
+                address: address,
+                tickets: [
+                    {
+                        ticketType: TYPE_TICKET_NAME[typeTicket],
+                        ticketId: tokenId,
+                    },
+                ],
+            };
+            tickets.push(owner);
+        } else {
+            tickets[i].tickets.push({ type: typeTicket, id: tokenId });
+        }
+
+        JSON.setItem("tickets", JSON.stringify(tickets));
+    }
 }
 
 export const MTContract = new MusicTicketContract();

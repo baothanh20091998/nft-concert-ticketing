@@ -21,6 +21,14 @@ const web3 = new Web3(Web3.givenProvider);
 //   };
 // }
 
+export const TYPE_TICKET_NAME = [
+  "Bronze",
+  "Silver",
+  "Gold",
+  "Platinum",
+  "Diamond",
+];
+
 class MusicTicketContract {
   contract;
   contractAbi = ContractABI;
@@ -43,49 +51,44 @@ class MusicTicketContract {
     console.log("balance of: ", response);
   }
 
-  async getTiketPrices(ticket) {
-    const response = await this.contract.methods.ticketPrices(ticket).call();
-    console.log("ticket prices: ", response);
-  }
-
-  async ticketMinted(ticket) {
-    const response = await this.contract.methods.ticketMinted(ticket).call();
-    console.log("ticket response: ", response);
-  }
-
   async mint({ amount, typeTicket, address }) {
-    const response = await this.contract.methods.mint(typeTicket).send({
+    const typeToPrice = [0.01, 0.02, 0.03, 0.04, 0.05];
+    const price = typeToPrice[typeTicket];
+
+    const rawTxn = {
       from: address,
-      value: Web3.utils.toWei(amount.toString(), "ether"),
-    });
+      value: web3.utils.toWei(amount.toString(), "ether"),
+    };
+    const response = await this.contract.methods.mint(price).send(rawTxn);
 
     const { tokenId } = response.events.Mint.returnValues;
 
-    console.log(response);
-    console.log(tokenId);
-    this.getTokenUri({ tokenId });
+    const tickets = JSON.parse(localStorage.getItem("tickets") || "[]");
 
-    console.log("mint response: ", response);
-  }
+    const i = tickets.findIndex((item) => item.address === address);
+    if (i === -1) {
+      const owner = {
+        address: address,
+        tickets: [
+          { ticketType: TYPE_TICKET_NAME[typeTicket], ticketId: tokenId },
+        ],
+      };
+      tickets.push(owner);
+    } else {
+      tickets[i].tickets.push({ type: typeTicket, id: tokenId });
+    }
 
-  async getTokenUri({ tokenId }) {
-    const response = await this.contract.methods.tokenURI(tokenId).call();
-    console.log("token uri: ", response);
-  }
-
-  async getBalanceOf({ address }) {
-    const response = await this.contract.methods.balanceOf(address).call();
-    console.log("balance of: ", response);
+    JSON.setItem("tickets", JSON.stringify(tickets));
   }
 }
 
 export const MTContract = new MusicTicketContract();
 
 // typeToPrice[0] = 0.01 ether;
-//         typeToPrice[1] = 0.02 ether;
-//         typeToPrice[2] = 0.03 ether;
-//         typeToPrice[3] = 0.04 ether;
-//         typeToPrice[4] = 0.05 ether;
+// typeToPrice[1] = 0.02 ether;
+// typeToPrice[2] = 0.03 ether;
+// typeToPrice[3] = 0.04 ether;
+// typeToPrice[4] = 0.05 ether;
 
 // base url + link image
 const baseURLImg = "https://nftstorage.link/ipfs/";

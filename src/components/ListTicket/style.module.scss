@@ -1,0 +1,155 @@
+.ListTicketWrapper {
+    width: 100%;
+    :global {
+        .table-container {
+            width: inherit;
+            thead {
+                text-align: left;
+                th {
+                    font-size: 12px;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    color: rgb(138, 147, 155);
+                    padding: 16px 0;
+                }
+            }
+
+            tbody {
+                tr {
+                    padding: 12px;
+                    transition: 250ms;
+                    &:hover {
+                        background-color: rgba(76, 80, 92, 0.2);
+                    }
+                    td {
+                        font-weight: bold;
+                        .box {
+                            display: flex;
+                            align-items: center;
+                            gap: 24px;
+
+                            img {
+                                width: 68px;
+                                height: 68px;
+                                border-radius: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    :global {
+        .info-box {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+
+            img {
+                width: 68px;
+                height: 68px;
+                border-radius: 10px;
+            }
+
+            .key {
+                font-size: 18px;
+                color: rgb(138, 147, 155);
+            }
+        }
+
+        .ant-table-wrapper .ant-table {
+            background-color: transparent !important;
+            color: var(--clr-light);
+        }
+
+        .ant-table-wrapper .ant-table-thead > tr > th {
+            background: transparent !important;
+            color: var(--clr-light);
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: rgb(138, 147, 155);
+            padding-top: 8px;
+            padding-bottom: 8px;
+
+            &::before {
+                width: 0 !important;
+                background-color: transparent !important;
+            }
+        }
+
+        .ant-table-wrapper .ant-table-tbody > tr > td.ant-table-cell-row-hover {
+            background: rgba(76, 80, 92, 0.2) !important;
+        }
+
+        .ant-table-wrapper .ant-table-thead > tr > th,
+        .ant-table-wrapper .ant-table-thead > tr > td {
+            border-bottom: none;
+        }
+
+        .ant-table-wrapper .ant-table-tbody > tr > td {
+            border-bottom: none;
+            font-weight: bold;
+        }
+
+        .ant-table-wrapper .ant-table-thead > tr > th,
+        .ant-table-wrapper .ant-table-thead > tr > td {
+            background: transparent;
+            &::before {
+                width: 0 !important;
+                background-color: transparent !important;
+            }
+        }
+    }
+}
+
+.ModalContainer {
+    :global {
+        .ant-modal-content {
+            background-color: var(--clr-background-primary);
+        }
+
+        .ant-modal-header {
+            background: transparent;
+            margin-bottom: 24px;
+
+            .ant-modal-title {
+                color: var(--clr-light);
+            }
+        }
+
+        .modal-content {
+            display: flex;
+            gap: 24px;
+
+            & > * {
+                width: 50%;
+            }
+
+            img {
+                object-fit: cover;
+                border-radius: 8px;
+            }
+
+            .box {
+                display: flex;
+                flex-flow: column;
+                gap: 8px;
+                &-item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    color: var(--clr-light);
+                }
+            }
+        }
+
+        .footer-content {
+            display: flex;
+            gap: 24px;
+            width: calc(50% - 14px);
+            margin-left: auto;
+        }
+    }
+}

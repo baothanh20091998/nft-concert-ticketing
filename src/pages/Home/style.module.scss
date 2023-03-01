@@ -1,10 +1,5 @@
 .HomeWrapper {
     position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
     :global {
         .banner-title {
             text-align: center;
@@ -14,6 +9,21 @@
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
+        }
+
+        .card-section {
+            height: calc(100vh - 68px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .list-ticket-section {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
 }

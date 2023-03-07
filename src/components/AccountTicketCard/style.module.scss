@@ -27,7 +27,8 @@
 
     .tickets {
       display: flex;
-      // text-align: center;
+      text-align: center;
+      justify-content: center;
 
       img {
         width: 32px;

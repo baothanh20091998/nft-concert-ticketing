@@ -1,5 +1,7 @@
+import { Modal, QRCode } from "antd";
 import React, { useEffect, useState } from "react";
 import { useUser } from "../../context";
+import { MTContract } from "../../utils/services";
 import AccountTicketCard from "../AccountTicketCard";
 import styles from "./style.module.scss";
 
@@ -7,15 +9,20 @@ const AccountTickets = () => {
   const { account } = useUser();
   const [value, setValue] = useState("");
   const [data, setData] = useState([]);
+  const [qrCode, setQrCode] = useState("");
   const handleChangeValue = (e) => setValue(e.target.value);
 
-  const renderCard = ({ ticketId, ticketType }, index) => {
+  const openModal = (id) => setQrCode(id);
+
+  const renderCard = ({ id, type }, index) => {
+    const open = () => openModal(id);
     return (
       <div className="nft_items">
         <AccountTicketCard
-          ticketId={ticketId}
-          id={index + 1}
-          ticketType={ticketType}
+          open={open}
+          ticketId={id}
+          id={id}
+          ticketType={type}
         />
       </div>
     );
@@ -23,19 +30,20 @@ const AccountTickets = () => {
 
   const renderFilteredCard = () => {
     const dataFiltered = data.filter((item) =>
-      item.ticketId.toLowerCase().includes(value.toLowerCase())
+      item.id.toLowerCase().includes(value.toLowerCase())
     );
     return dataFiltered.map(renderCard);
   };
 
   useEffect(() => {
-    const tickets = JSON.parse(localStorage.getItem("tikets") || "[]");
-    if (tickets.length > 0) {
-      const i = tickets.findIndex((item) => item.address == account);
-      if (i !== -1) {
-        setData(tickets[i].tickets);
+    (async () => {
+      try {
+        const tickets = await MTContract.getBalanceOf(account);
+        setData(tickets);
+      } catch (error) {
+        setData([]);
       }
-    }
+    })();
   }, []);
 
   return (
@@ -49,6 +57,14 @@ const AccountTickets = () => {
         placeholder="Search by hash..."
       />
       <div className="nft__list">{renderFilteredCard()}</div>
+      <Modal
+        centered
+        footer={false}
+        onCancel={() => setQrCode("")}
+        open={!!qrCode}
+      >
+        <QRCode style={{ margin: "0 auto" }} value={qrCode} />
+      </Modal>
     </div>
   );
 };

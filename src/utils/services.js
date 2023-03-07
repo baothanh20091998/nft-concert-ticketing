@@ -1,90 +1,86 @@
 import ContractABI from "./constants/contractABI.json";
 import { ContractAddress } from "./constants/contract";
 import Web3 from "web3";
-
-const GoerliTestNetURL = "https://goerli.blockpi.network/v1/rpc/public";
+import axios from "axios";
 
 const web3 = new Web3(Web3.givenProvider);
 
-// class Wallet {
-//   wallet = "";
+const baseURLImg = "https://nftstorage.link/ipfs/";
+const baseURL = "https://coin98-hackathon-api.onrender.com/metadata";
 
-//   connectWallet = async () => {
-//     try {
-//       const response = await web3.eth.requestAccounts();
-//       this.wallet = response[0];
-//       web3.eth.defaultAccount = response[0];
-//       return response[0];
-//     } catch (error) {
-//       console.log("error connet : ", error);
-//     }
-//   };
-// }
+export const BaseApi = axios.create({
+  baseURL,
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+  },
+});
+
+const apiPostNft = async ({ id, type, owner }) =>
+  await BaseApi.post("/token", {
+    id,
+    type,
+    owner,
+    image: "default.png",
+    description: "default",
+    name: "default",
+  });
+
+const apiGetNftByOwener = async ({ address }) =>
+  await BaseApi.get(`/owner/${address}`);
+
+const apiGetAllNfts = async () => await BaseApi.get("/token");
 
 export const TYPE_TICKET_NAME = [
-    "Bronze",
-    "Silver",
-    "Gold",
-    "Platinum",
-    "Diamond",
+  "Bronze",
+  "Silver",
+  "Gold",
+  "Platinum",
+  "Diamond",
 ];
 
 class MusicTicketContract {
-    contract;
-    contractAbi = ContractABI;
-    contractAdress = ContractAddress;
+  contract;
+  contractAbi = ContractABI;
+  contractAdress = ContractAddress;
 
-    constructor() {
-        this.contract = this.initContract();
-    }
+  constructor() {
+    this.contract = this.initContract();
+  }
 
-    initContract() {
-        const contract = new web3.eth.Contract(
-            this.contractAbi,
-            this.contractAdress
-        );
-        return contract;
-    }
+  initContract() {
+    const contract = new web3.eth.Contract(
+      this.contractAbi,
+      this.contractAdress
+    );
+    return contract;
+  }
 
-    async getBalanceOf(address) {
-        const response = await this.contract.methods.balanceOf(address).call();
-        console.log("balance of: ", response);
-    }
+  async getBalanceOf(address) {
+    // const response = await this.contract.methods.balanceOf(address).call();
+    const res = await apiGetNftByOwener({ address });
+    return res.data;
+    // console.log("balance of: ", response);
+  }
 
-    async mint({ typeTicket, address }) {
-        const typeToPrice = [0.01, 0.02, 0.03, 0.04, 0.05];
-        const price = typeToPrice[typeTicket];
+  async mint({ typeTicket, address }) {
+    const typeToPrice = [0.01, 0.02, 0.03, 0.04, 0.05];
+    const price = typeToPrice[typeTicket];
 
-        const rawTxn = {
-            from: address,
-            value: web3.utils.toWei(price.toString(), "ether"),
-        };
-        const response = await this.contract.methods
-            .mint(typeTicket)
-            .send(rawTxn);
+    const rawTxn = {
+      from: address,
+      value: web3.utils.toWei(price.toString(), "ether"),
+    };
+    const response = await this.contract.methods.mint(typeTicket).send(rawTxn);
 
-        const { tokenId } = response.events.Mint.returnValues;
+    const { tokenId } = response.events.Mint.returnValues;
 
-        const tickets = JSON.parse(localStorage.getItem("tickets") || "[]");
-
-        const i = tickets.findIndex((item) => item.address === address);
-        if (i === -1) {
-            const owner = {
-                address: address,
-                tickets: [
-                    {
-                        ticketType: TYPE_TICKET_NAME[typeTicket],
-                        ticketId: tokenId,
-                    },
-                ],
-            };
-            tickets.push(owner);
-        } else {
-            tickets[i].tickets.push({ type: typeTicket, id: tokenId });
-        }
-
-        JSON.setItem("tickets", JSON.stringify(tickets));
-    }
+    const res = await apiPostNft({
+      id: tokenId,
+      type: typeTicket.toString(),
+      owner: address,
+    });
+    console.log(res);
+  }
 }
 
 export const MTContract = new MusicTicketContract();
@@ -96,4 +92,3 @@ export const MTContract = new MusicTicketContract();
 // typeToPrice[4] = 0.05 ether;
 
 // base url + link image
-const baseURLImg = "https://nftstorage.link/ipfs/";
